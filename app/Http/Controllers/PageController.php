@@ -8,15 +8,16 @@ class PageController extends Controller
 {
     public function index()
     {
-        return 'Using page controller';
+        return view('pages.home');
     }
 
-    public function data(Request $request)
+    public function contact()
     {
-        // var_dump() & die();
-        // dd($request);
-        foreach ($request->all() as $key => $value) {
-            echo $key . ' : ' . $value . '<br>';
-        }
+        return view('pages.contact');
+    }
+
+    public function about()
+    {
+        return view('pages.about');
     }
 }
