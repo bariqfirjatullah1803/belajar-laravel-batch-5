@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\AdminController;
@@ -79,3 +82,22 @@ Route::prefix('/admin')->controller(AdminController::class)->name('admin.')->gro
     Route::get('/chart', 'chart')->name('chart');
     Route::get('/table', 'table')->name('table');
 });
+
+Route::controller(AuthController::class)->name('auth.')->group(function () {
+    Route::get('/login', 'login')->name('login');
+    Route::get('/register', 'register')->name('register');
+});
+
+Route::prefix('/admin/school')->controller(SchoolController::class)->name('school.')->group(function () {
+    Route::get('/', 'index')->name('index');
+
+    Route::get('/create', 'create')->name('create');
+    Route::post('/', 'store')->name('store');
+
+    Route::get('/{id}', 'edit')->name('edit');
+    Route::put('/{id}', 'update')->name('update');
+
+    Route::delete('/{id}', 'destroy')->name('destroy');
+});
+
+Route::resource('/admin/student', StudentController::class)->except(['show']);
