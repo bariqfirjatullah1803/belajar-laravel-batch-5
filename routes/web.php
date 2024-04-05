@@ -76,28 +76,44 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
 // Group Routing
-Route::prefix('/admin')->controller(AdminController::class)->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('/admin')->controller(AdminController::class)->group(function () {
+    // Route Templating Admin
+    Route::name('admin.')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/dashboard', 'index')->name('dashboard');
+        Route::get('/chart', 'chart')->name('chart');
+        Route::get('/table', 'table')->name('table');
+    });
 
-    Route::get('/dashboard', 'index')->name('dashboard');
-    Route::get('/chart', 'chart')->name('chart');
-    Route::get('/table', 'table')->name('table');
+    // Route School
+    Route::prefix('/school')->controller(SchoolController::class)->name('school.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{id}', 'show')->name('show');
+
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    // Route Student
+    Route::resource('/student', StudentController::class)->except(['show']);
 });
 
-Route::controller(AuthController::class)->name('auth.')->group(function () {
-    Route::get('/login', 'login')->name('login');
-    Route::get('/register', 'register')->name('register');
-});
+// Route::prefix('/manual')->controller(AuthController::class)->name('auth.')->group(function () {
+//     Route::get('/login', 'showFormLogin')->name('login');
+//     Route::post('/login', 'login')->name('action.login');
 
-Route::prefix('/admin/school')->controller(SchoolController::class)->name('school.')->group(function () {
-    Route::get('/', 'index')->name('index');
+//     Route::get('/register', 'showFormRegister')->name('register');
+//     Route::post('/register', 'register')->name('action.register');
 
-    Route::get('/create', 'create')->name('create');
-    Route::post('/', 'store')->name('store');
+//     Route::post('/logout', 'logout')->name('action.logout');
+// });
 
-    Route::get('/{id}', 'edit')->name('edit');
-    Route::put('/{id}', 'update')->name('update');
-
-    Route::delete('/{id}', 'destroy')->name('destroy');
-});
-
-Route::resource('/admin/student', StudentController::class)->except(['show']);
+Auth::routes([
+    'reset' => false,
+    'confirm' => false,
+]);

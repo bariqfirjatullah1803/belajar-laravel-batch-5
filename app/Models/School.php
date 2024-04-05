@@ -11,4 +11,9 @@ class School extends Model
 
     // protected $guarded = ['id'];
     protected $fillable = ['name', 'address'];
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
 }

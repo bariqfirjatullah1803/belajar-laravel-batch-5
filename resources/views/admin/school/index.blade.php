@@ -20,6 +20,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Street Address</th>
+                            <th>Student Count</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -28,6 +29,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Street Address</th>
+                            <th>Student Count</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -37,10 +39,13 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->address }}</td>
+                                <td>{{ $item->students_count }}</td>
                                 <td>
                                     <form action="{{ route('school.destroy', $item->id) }}" method="post">
                                         @method('delete')
                                         @csrf
+                                        <a href="{{ route('school.show', $item->id) }}"
+                                            class="btn btn-sm btn-info">Detail</a>
                                         <a href="{{ route('school.edit', $item->id) }}"
                                             class="btn btn-sm btn-warning">Edit</a>
                                         <button type="submit" onclick="return confirm('are you sure?')"

@@ -9,8 +9,16 @@ class SchoolController extends Controller
 {
     public function index()
     {
-        $schools = School::all();
+        $schools = School::withCount('students')->get();
+
         return view('admin.school.index', compact('schools'));
+    }
+
+    public function show($id)
+    {
+        $students = School::findOrFail($id)->students()->get();
+
+        return view('admin.student.index', compact('students'));
     }
 
     public function create()
